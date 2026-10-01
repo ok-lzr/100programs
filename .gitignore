@@ -1,0 +1,14 @@
+# Python 运行时产生的缓存（build.py 会 import lint_author，所以会生成）
+__pycache__/
+*.pyc
+
+# 系统垃圾文件
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 编辑器
+.vscode/
+.idea/
+
+# 注意：progress.json 一定要提交，网站和打卡工具都读它，别加进这里

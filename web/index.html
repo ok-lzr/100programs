@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ok-lzr // 100 PROGRAMS · 我的 Python 进度</title>
+<meta name="description" content="ok-lzr 的 Python 练习进度：100 个项目，一关一关来。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+<div class="scanline" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">ok-lzr</span><span class="brand-slash">//</span><span class="brand-name">100 PROGRAMS</span>
+  </div>
+  <div class="hudline">
+    HUD-CORE v2.0 · Python 练习进度 · 湖南长沙 · 状态 <span class="led"></span><span class="ok">在线</span>
+  </div>
+  <div class="clockbox">
+    <span class="lab">长沙时间</span>
+    <b id="clock">--:--:--</b>
+    <span class="sub" id="clock-date">同步中…</span>
+  </div>
+</header>
+
+<nav class="nav" id="nav">
+  <a href="#overview" class="active"><i>01</i>总览</a>
+  <a href="#route"><i>02</i>阶段</a>
+  <a href="#library"><i>03</i>项目库</a>
+  <a href="#about"><i>04</i>关于</a>
+  <a href="#sync"><i>05</i>打卡</a>
+</nav>
+
+<main>
+
+  <!-- ============ 01 总览 ============ -->
+  <section id="overview">
+    <div class="hero">
+      <h1 class="hero-line" id="hero-line">100 个 Python 项目，一关一关来。</h1>
+      <p class="hero-sub" id="hero-sub">读取进度中…</p>
+    </div>
+
+    <div class="seclabel"><i>SYS.CHECK</i>现在的进度</div>
+
+    <div class="overview-grid">
+      <div class="panel ring-panel">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 200 200" class="ring">
+            <circle class="ring-bg" cx="100" cy="100" r="86"></circle>
+            <circle class="ring-fg" id="ring-main" cx="100" cy="100" r="86"></circle>
+            <circle class="ring-bg2" cx="100" cy="100" r="70"></circle>
+            <circle class="ring-fg2" id="ring-project" cx="100" cy="100" r="70"></circle>
+          </svg>
+          <div class="ring-center">
+            <b id="ring-percent">0%</b>
+            <span>关卡完成度</span>
+            <em id="ring-detail">0 / 0 关</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="panel stat">
+          <span class="stat-lab">完成关卡</span>
+          <b id="kpi-levels">0</b><em id="kpi-levels-total">/ 0</em>
+          <p>已写好任务卡的部分</p>
+        </div>
+        <div class="panel stat">
+          <span class="stat-lab">完成项目</span>
+          <b id="kpi-projects">0</b><em id="kpi-projects-total">/ 0</em>
+          <p>一个项目的关卡全部做完才算</p>
+        </div>
+        <div class="panel stat">
+          <span class="stat-lab">连续过关</span>
+          <b id="kpi-streak">0</b><em>关</em>
+          <p>从卡住的那一关往前数，中间没断</p>
+        </div>
+        <div class="panel stat">
+          <span class="stat-lab">最近打卡</span>
+          <b id="kpi-last" class="sm">—</b>
+          <p id="kpi-last-note">还没有打卡记录</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel feed-panel">
+      <div class="feed-lab">FEED.LOG // 最近动态</div>
+      <div id="feed" class="timeline"></div>
+    </div>
+  </section>
+
+  <!-- ============ 02 阶段 ============ -->
+  <section id="route">
+    <div class="seclabel"><i>ROUTE.MAP</i>五个阶段 · 每 20 个项目一个台阶</div>
+    <div id="stage-cards" class="stage-grid"></div>
+    <div class="panel note-panel">
+      <div class="note-title">难度是怎么爬的</div>
+      <p class="dim-p">100 个项目的难度从 1.0 平滑爬到 5.0，每 10 个项目升半颗星，中途没有回落。<br>
+      前 20 个是「找回手感」：命令行 + 文本文件，代码 100~150 行。往后文件数和行数逐步加上去，<b>单个文件不超过 300 行、总文件数不超过 6 个</b>。</p>
+    </div>
+  </section>
+
+  <!-- ============ 03 项目库 ============ -->
+  <section id="library">
+    <div class="seclabel"><i>ARCHIVE.LOAD</i>项目库 · 全部 100 个</div>
+
+    <div class="panel filter-panel">
+      <div class="filter-row">
+        <span class="filter-lab">阶段</span>
+        <div class="chips" id="filter-stage"></div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-lab">状态</span>
+        <div class="chips" id="filter-status">
+          <button class="chip active" data-status="all">全部</button>
+          <button class="chip" data-status="ready">还没开始</button>
+          <button class="chip" data-status="doing">进行中</button>
+          <button class="chip" data-status="done">已完成</button>
+          <button class="chip" data-status="planned">待编写</button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-lab">搜索</span>
+        <input type="search" id="search" placeholder="输编号或关键词，比如 温度 / 009 / 爬虫" autocomplete="off">
+        <span class="count" id="lib-count"></span>
+      </div>
+    </div>
+
+    <div id="project-grid" class="project-grid"></div>
+    <p class="dim-p lib-hint">点任意一个项目，可以看到它被拆成了哪几关、每关什么时候做完的。每个项目的任务卡（思路、语法点、自检清单）在代码仓库对应文件夹的 README.md 里，不放在网站上。</p>
+  </section>
+
+  <!-- ============ 04 关于 ============ -->
+  <section id="about">
+    <div class="seclabel"><i>OPERATOR.ID</i>关于这个进度页</div>
+    <div class="two-col">
+      <div class="panel">
+        <div class="note-title">我在做什么</div>
+        <p>用 Python 从零做 100 个项目，每个项目拆成 3~5 关，一关 20~40 分钟。做完一关就在这个页面上点亮一格，所以这里的进度是真的、有时间的。</p>
+        <p class="dim-p">顺序是固定的：先命令行小工具，再做窗口和游戏，然后是数据与网页，最后是多文件的完整作品。</p>
+      </div>
+      <div class="panel">
+        <div class="note-title">联系</div>
+        <ul class="note-list tight contact">
+          <li><span>GitHub</span><a href="https://github.com/ok-lzr" target="_blank" rel="noopener">github.com/ok-lzr ↗</a></li>
+          <li><span>QQ</span><a href="https://wpa.qq.com/msgrd?v=3&amp;uin=386477796&amp;site=qq&amp;menu=yes" target="_blank" rel="noopener">386477796 ↗</a></li>
+          <li><span>邮箱</span><a href="mailto:csgdnrxg@163.com">csgdnrxg@163.com ✉</a></li>
+          <li><span>地点</span><b>湖南省长沙市</b></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="note-title">这个页面是怎么来的</div>
+        <p>纯原生 HTML / CSS / JavaScript，没有任何外部依赖，也没有后端。进度存在代码仓库的 <code>progress.json</code> 里，页面只是把它画出来。</p>
+        <p class="dim-p">每勾一关都会记下完成时间，「最近动态」就是按时间倒序排出来的。数据文件里是一串真/假：第几个是 true，就代表第几关做完了。</p>
+      </div>
+      <div class="panel">
+        <div class="note-title">怎么算「完成」</div>
+        <ul class="note-list tight">
+          <li><b>一关完成</b>：代码能跑出这一关要求的效果，并且过了一遍自检清单。</li>
+          <li><b>一个项目完成</b>：它的 3~5 关全部完成。</li>
+          <li><b>连续过关</b>：从你卡住的那一关往前数，中间没有断开的那一段。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 打卡 ============ -->
+  <section id="sync">
+    <div class="seclabel"><i>DATA.SYNC</i>打卡台 · 给我自己用</div>
+    <div class="panel sync-panel">
+      <div class="sync-status" id="sync-status">读取中…</div>
+      <div class="sync-actions">
+        <button class="btn primary" id="btn-export">导出 progress.json</button>
+        <button class="btn" id="btn-copy">复制内容</button>
+        <label class="btn" for="file-import">导入 progress.json</label>
+        <input type="file" id="file-import" accept=".json,application/json" hidden>
+        <button class="btn danger" id="btn-reset">清空本地改动</button>
+      </div>
+      <div class="sync-help">
+        <p><b>平时怎么打卡：</b>在「项目库」点开项目，关卡右边的方框点一下。改动先存在浏览器本地（刷新不会丢），勾完点「导出 progress.json」覆盖进仓库，再 <code>git push</code>，别人刷新页面就能看到。</p>
+        <p><b>更省事的办法：</b>用命令行 <code>python tools/checkin.py 001 2</code>，它会把仓库里的文件直接写好，你只要 <code>git push</code>。</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span>ok-lzr · 100 PROGRAMS · 湖南长沙</span>
+  <span class="dim-p">纯原生 HTML / CSS / JavaScript · 无外部依赖</span>
+  <span class="sig">SIGNAL <b>稳定</b></span>
+</footer>
+
+<div id="toast" class="toast"></div>
+
+<script src="data/projects.js"></script>
+<script src="data/progress.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

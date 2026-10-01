@@ -1,0 +1,46 @@
+# 把 web/ 文件夹发布成网站（GitHub Pages）
+#
+# 用法：
+#   1. 把这个仓库推到 GitHub，分支默认 main
+#   2. 仓库 Settings → Pages → Source 选 "GitHub Actions"
+#   3. 以后每次 push，这个流程会自动把 web/ 发布出去
+#   4. 要挂 ok-lzr.us.ci 的子域名，在 Pages 里填 Custom domain，
+#      然后去域名 DNS 加一条 CNAME 指向 <用户名>.github.io
+
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 取出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 上传 web/ 作为网站内容
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+      - name: 发布
+        id: deployment
+        uses: actions/deploy-pages@v4

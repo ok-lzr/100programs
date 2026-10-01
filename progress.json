@@ -1,0 +1,441 @@
+{
+  "version": 2,
+  "updated": "2026-10-01 13:03",
+  "note": "每关做没做完 + 完成时间。levels 里第 1 个是第 1 关；times 跟它一一对应，没做完就是空字符串。",
+  "progress": {
+    "001": {
+      "levels": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "2026-10-01 13:03",
+        "",
+        "",
+        ""
+      ]
+    },
+    "002": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "003": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "004": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "005": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "006": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "007": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "008": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "009": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "010": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "011": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "012": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "013": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "014": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "015": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "016": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "017": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "018": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "019": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "020": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "021": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "022": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "023": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "024": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "025": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "026": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "027": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "028": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "029": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "030": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "031": {
+      "levels": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "times": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    }
+  }
+}
