@@ -69,6 +69,20 @@ python tools/build.py         # 体检不过关会拒绝生成
 
 `build.py` 会重新生成所有 `README.md`、网站数据和 `项目总览.md`，所以网站和任务卡永远不会对不上。
 
-## 部署
+## 部署（Cloudflare Pages）
 
-推到 GitHub → Settings → Pages → Source 选 **GitHub Actions**。`.github/workflows/pages.yml` 会把 `web/` 自动发布出去，之后每次 `git push` 都会更新。要挂 `ok-lzr.us.ci` 的子域名，在 Pages 里填 Custom domain，再去 DNS 加一条 CNAME。
+网站是纯静态的（原生 HTML / CSS / JS，无依赖），**不需要构建命令**——直接把 `web` 文件夹发布出去就行。
+
+在 Cloudflare 控制台点几下（只需配置一次）：
+
+1. **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
+2. 选中仓库 `100programs`，分支选 `main`
+3. 构建设置：
+   - Framework preset：**None**
+   - Build command：**留空**（如果它非要填，就填 `exit 0`）
+   - **Build output directory：`web`**
+4. 点 **Save and Deploy**
+
+之后每次 `git push`，Cloudflare 会自动重新发布。要挂自己的域名，在项目里 **Custom domains** 添加，比如 `100.ok-lzr.us.ci`，再按提示加 DNS 记录。
+
+本地预览：在 `web` 目录里跑 `python -m http.server 8000`，然后打开 `127.0.0.1:8000`。
