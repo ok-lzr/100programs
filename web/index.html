@@ -31,7 +31,6 @@
   <a href="#route"><i>02</i>阶段</a>
   <a href="#library"><i>03</i>项目库</a>
   <a href="#about"><i>04</i>关于</a>
-  <a href="#sync"><i>05</i>打卡</a>
 </nav>
 
 <main>
@@ -153,8 +152,8 @@
       </div>
       <div class="panel">
         <div class="note-title">这个页面是怎么来的</div>
-        <p>纯原生 HTML / CSS / JavaScript，没有任何外部依赖，也没有后端。进度存在代码仓库的 <code>progress.json</code> 里，页面只是把它画出来。</p>
-        <p class="dim-p">每勾一关都会记下完成时间，「最近动态」就是按时间倒序排出来的。数据文件里是一串真/假：第几个是 true，就代表第几关做完了。</p>
+        <p>纯原生 HTML / CSS / JavaScript，没有任何外部依赖，也没有后端。<b>这个页面是只读的</b>——它不加任何东西，只是把仓库里的进度画出来。</p>
+        <p class="dim-p">进度存在代码仓库的 <code>progress.json</code> 里：每完成一关都会记下完成时间，「最近动态」就是按时间倒序排出来的。数据文件里是一串真/假，第几个是 true，就代表第几关做完了。</p>
       </div>
       <div class="panel">
         <div class="note-title">怎么算「完成」</div>
@@ -167,24 +166,7 @@
     </div>
   </section>
 
-  <!-- ============ 05 打卡 ============ -->
-  <section id="sync">
-    <div class="seclabel"><i>DATA.SYNC</i>打卡台 · 给我自己用</div>
-    <div class="panel sync-panel">
-      <div class="sync-status" id="sync-status">读取中…</div>
-      <div class="sync-actions">
-        <button class="btn primary" id="btn-export">导出 progress.json</button>
-        <button class="btn" id="btn-copy">复制内容</button>
-        <label class="btn" for="file-import">导入 progress.json</label>
-        <input type="file" id="file-import" accept=".json,application/json" hidden>
-        <button class="btn danger" id="btn-reset">清空本地改动</button>
-      </div>
-      <div class="sync-help">
-        <p><b>平时怎么打卡：</b>在「项目库」点开项目，关卡右边的方框点一下。改动先存在浏览器本地（刷新不会丢），勾完点「导出 progress.json」覆盖进仓库，再 <code>git push</code>，别人刷新页面就能看到。</p>
-        <p><b>更省事的办法：</b>用命令行 <code>python tools/checkin.py 001 2</code>，它会把仓库里的文件直接写好，你只要 <code>git push</code>。</p>
-      </div>
-    </div>
-  </section>
+  <!-- 这个页面是只读的：没有打卡台、没有勾选框。打卡用 python tools/checkin.py -->
 
 </main>
 
@@ -193,8 +175,6 @@
   <span class="dim-p">纯原生 HTML / CSS / JavaScript · 无外部依赖</span>
   <span class="sig">SIGNAL <b>稳定</b></span>
 </footer>
-
-<div id="toast" class="toast"></div>
 
 <script src="data/projects.js"></script>
 <script src="data/progress.js"></script>

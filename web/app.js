@@ -1,12 +1,11 @@
 /* ==========================================================================
-   ok-lzr // 100 PROGRAMS · 进度展示页
+   ok-lzr // 100 PROGRAMS · 进度展示页（只读）
 
    数据：window.DECK_DATA     由 tools/build.py 从 data/ 生成
-   进度：优先读 progress.json，读不到就用内置的 window.DECK_PROGRESS
-        在页面上勾的先存在浏览器本地，点「导出 progress.json」再覆盖进仓库
+   进度：读 progress.json；读不到（比如直接双击打开）就用内置的 window.DECK_PROGRESS
 
-   这个页面的定位是「给别人看我的进度」，所以这里不放任务卡的思路和提示，
-   只放：做到哪了、什么时候做的、每个项目是干什么的。
+   这个页面是**只读**的：它只把进度画出来，页面上没有任何能改动数据的东西。
+   打卡用命令行 python tools/checkin.py，改完 push，这个页面跟着变。
    ========================================================================== */
 
 (function () {
@@ -15,15 +14,10 @@
   var DATA = window.DECK_DATA || { meta: { stages: [] }, projects: [] };
   var PROJECTS = DATA.projects || [];
   var STAGES = (DATA.meta && DATA.meta.stages) || [];
-  var NOTE = "每关做没做完 + 完成时间。levels 里第 1 个是第 1 关；times 跟它一一对应，没做完就是空字符串。";
-  var STORE_KEY = "deck100.local";
   var FEED_MAX = 12;
 
   var state = {
     progress: {},
-    repoUpdated: "",
-    repoSource: "",
-    dirty: false,
     filter: { stage: "all", status: "all", q: "" },
     pendingDetail: null,
   };
@@ -72,15 +66,9 @@
     return new Date(utc + 8 * 3600000);
   }
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  /* 把时间格式化成 年-月-日 时:分，用来跟 progress.json 里的完成时间比较 */
   function stamp(d) {
     return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + " " + pad(d.getHours()) + ":" + pad(d.getMinutes());
-  }
-  function toast(msg) {
-    var t = $("#toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    clearTimeout(toast._t);
-    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2600);
   }
 
   /* ------------------------------ 时钟 ------------------------------ */
@@ -92,20 +80,7 @@
     $("#clock-date").textContent = d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + " 星期" + week + " UTC+8";
   }
 
-  /* --------------------------- 进度的读写 --------------------------- */
-
-  function readLocal() {
-    try {
-      var raw = localStorage.getItem(STORE_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) { return null; }
-  }
-  function writeLocal() {
-    try {
-      localStorage.setItem(STORE_KEY, JSON.stringify({ updated: state.repoUpdated, progress: state.progress }));
-    } catch (e) { /* 隐私模式下写不了，忽略 */ }
-  }
-  function clearLocal() { try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
+  /* --------------------------- 读取进度（只读） --------------------------- */
 
   function normalize(obj) {
     var out = {};
@@ -124,28 +99,8 @@
   }
 
   function loadProgress() {
-    var fallback = { version: 2, updated: "（内置副本）", progress: window.DECK_PROGRESS || {} };
     var done = function (repo) {
-      state.repoUpdated = repo.updated || "";
-      state.repoSource = repo.__source || "";
-      var local = readLocal();
-      var baseline = normalize(repo);
-      if (local && normalize(local).progress) {
-        var sameBase = (local.updated || "") === (state.repoUpdated || "");
-        var localProg = normalize(local);
-        if (sameBase) {
-          state.progress = localProg;
-          state.dirty = JSON.stringify(localProg) !== JSON.stringify(baseline);
-        } else {
-          state.progress = baseline;
-          state.dirty = false;
-          writeLocal();
-          toast("progress.json 有新版本，已按文件为准刷新");
-        }
-      } else {
-        state.progress = baseline;
-        state.dirty = false;
-      }
+      state.progress = normalize(repo);
       renderAll();
       if (state.pendingDetail) {
         var pid = state.pendingDetail;
@@ -156,23 +111,10 @@
 
     fetch("progress.json", { cache: "no-store" })
       .then(function (r) { if (!r.ok) throw new Error("no file"); return r.json(); })
-      .then(function (j) { j.__source = "progress.json"; done(j); })
+      .then(done)
       .catch(function () {
-        var f = fallback;
-        f.__source = "内置副本（直接双击打开时读不到 progress.json）";
-        done(f);
+        done({ version: 2, progress: window.DECK_PROGRESS || {} });
       });
-  }
-
-  function exportObject() {
-    var o = {};
-    PROJECTS.forEach(function (p) {
-      if (levels(p).length) {
-        var e = rawEntry(p.id, levels(p).length);
-        o[p.id] = { levels: e.levels, times: e.times };
-      }
-    });
-    return { version: 2, updated: stamp(nowCN()), note: NOTE, progress: o };
   }
 
   /* ------------------------------ 统计 ------------------------------ */
@@ -455,20 +397,9 @@
       var box = el("div", "level" + (ok ? " done" : ""));
 
       var row = el("div", "level-head");
-      var tick = el("div", "tick" + (ok ? " on" : ""));
-      tick.title = ok ? "点一下取消勾选" : "做完了，勾一下";
-      tick.addEventListener("click", function (e) {
-        e.stopPropagation();
-        toggle(p, i);
-        box.classList.toggle("done", arrFor(p)[i]);
-        tick.classList.toggle("on", arrFor(p)[i]);
-        var tspan = row.querySelector(".lv-time");
-        tspan.textContent = timesFor(p)[i] ? ("完成于 " + timesFor(p)[i]) : (lv.time || "");
-        var pbar = d.querySelector(".d-progress b");
-        if (pbar) pbar.textContent = doneIn(p) + " / " + ls.length;
-        afterProgressChange();
-      });
-      row.appendChild(tick);
+      var mark = el("div", "lv-mark" + (ok ? " on" : ""), ok ? "✓" : "·");
+      mark.title = ok ? "已完成" : "还没做";
+      row.appendChild(mark);
       row.appendChild(el("span", "lv-n", "#" + lv.n));
       row.appendChild(el("span", "lv-name", lv.name));
       row.appendChild(el("span", "lv-time", tm[i] ? ("完成于 " + tm[i]) : (lv.time || "")));
@@ -477,6 +408,7 @@
     });
     d.appendChild(list);
     d.appendChild(el("p", "dim-p", "任务卡（这一关要做出什么效果、要用到哪些语法、自检清单）在仓库里 " + p.dir + "/README.md，不放在网站上。"));
+    d.appendChild(el("p", "dim-p", "这个页面是只读的：上面的完成状态来自仓库里的 progress.json，在这里改不了任何东西。"));
 
     back.appendChild(d);
     document.body.appendChild(back);
@@ -510,86 +442,6 @@
     clearHash();
   }
 
-  /* -------------------------- 勾选与同步 -------------------------- */
-
-  function toggle(p, i) {
-    var n = levels(p).length;
-    var e = rawEntry(p.id, n);
-    e.levels[i] = !e.levels[i];
-    e.times[i] = e.levels[i] ? stamp(nowCN()) : "";
-    state.progress[p.id] = e;
-    state.dirty = true;
-    writeLocal();
-    var allDone = e.levels.filter(Boolean).length === n;
-    toast(allDone
-      ? (p.id + " " + p.title + " 全部做完了 🎉")
-      : (p.id + " 第 " + (i + 1) + " 关" + (e.levels[i] ? "完成 ✅" : "已取消")));
-  }
-
-  function afterProgressChange() {
-    renderOverview();
-    renderRoadmap();
-    renderLibrary();
-    renderSync();
-  }
-
-  function renderSync() {
-    var s = stats();
-    var lines = [];
-    lines.push("仓库文件   " + (state.repoUpdated || "未知") + (state.repoSource ? "　（来源：" + state.repoSource + "）" : ""));
-    lines.push("本地改动   " + (state.dirty ? "有未导出的勾选（先存在浏览器里，刷新不会丢）" : "与文件一致"));
-    lines.push("总进度     " + s.doneLevels + " / " + s.totalLevels + " 关　·　完成项目 " + s.doneProjects + " / " + s.written + "　·　本月 " + s.thisMonth + " 关");
-    $("#sync-status").textContent = lines.join("\n");
-  }
-
-  function doExport() {
-    var obj = exportObject();
-    var blob = new Blob([JSON.stringify(obj, null, 2) + "\n"], { type: "application/json" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "progress.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 3000);
-    state.dirty = false;
-    state.repoUpdated = obj.updated;
-    writeLocal();
-    renderSync();
-    toast("已导出 progress.json，覆盖进仓库的 web/progress.json 再 push");
-  }
-
-  function doCopy() {
-    var text = JSON.stringify(exportObject(), null, 2) + "\n";
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(
-        function () { toast("已复制 progress.json 的内容"); },
-        function () { toast("复制失败，改用「导出」按钮吧"); }
-      );
-    } else {
-      toast("这个浏览器不支持自动复制，用「导出」按钮");
-    }
-  }
-
-  function doImport(file) {
-    var fr = new FileReader();
-    fr.onload = function () {
-      try {
-        var j = JSON.parse(fr.result);
-        state.progress = normalize(j);
-        state.repoUpdated = j.updated || "";
-        state.repoSource = "手动导入";
-        state.dirty = false;
-        writeLocal();
-        afterProgressChange();
-        toast("已导入：" + file.name);
-      } catch (e) {
-        toast("这个文件不是合法的 JSON，导入失败");
-      }
-    };
-    fr.readAsText(file, "utf-8");
-  }
-
   /* ------------------------------ 导航 ------------------------------ */
 
   function initNav() {
@@ -611,7 +463,6 @@
     renderRoadmap();
     renderFilters();
     renderLibrary();
-    renderSync();
   }
 
   function init() {
@@ -630,18 +481,6 @@
         state.filter.status = b.getAttribute("data-status");
         renderLibrary();
       });
-    });
-    $("#btn-export").addEventListener("click", doExport);
-    $("#btn-copy").addEventListener("click", doCopy);
-    $("#file-import").addEventListener("change", function (e) {
-      if (e.target.files && e.target.files[0]) doImport(e.target.files[0]);
-      e.target.value = "";
-    });
-    $("#btn-reset").addEventListener("click", function () {
-      clearLocal();
-      state.dirty = false;
-      toast("已清空浏览器里的改动，重新读取文件");
-      loadProgress();
     });
 
     state.pendingDetail = hashTarget();

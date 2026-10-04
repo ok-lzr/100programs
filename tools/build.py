@@ -159,8 +159,9 @@ def readme_text(p: dict) -> str:
     L.append("")
     L.append("## 打卡")
     L.append("")
-    L.append(f"- 在网站上勾选：打开网站 → 项目库里找到 {p['id']} → 勾掉完成的关卡")
-    L.append(f"- 或者命令行：`python tools/checkin.py {p['id']} 1`（数字是关卡号）")
+    L.append(f"做完这一关，在命令行里打卡：`python tools/checkin.py {p['id']} 1`（数字是关卡号）")
+    L.append("")
+    L.append("打卡记录写在 `progress.json` 里，提交到仓库后网站会自动更新。网站是**只读**的，只用来给大家（包括你自己）看进度，打卡只有命令行一种方式。")
     L.append("")
     return "\n".join(L) + "\n"
 
